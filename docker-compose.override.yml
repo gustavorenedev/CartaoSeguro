@@ -1,0 +1,18 @@
+services:
+  cartaosegurodb:
+    container_name: cartaosegurodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db 
+
+  cartaoseguro.api:
+    container_name: cartaoseguro.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://cartaosegurodb:27017"
+    depends_on:
+      - cartaosegurodb
+    ports:
+      - "8080:8080"

@@ -1,0 +1,13 @@
+services:
+
+  cartaosegurodb:
+    image: mongo
+
+  cartaoseguro.api:
+    image: ${DOCKER_REGISTRY-}cartaoseguroapi
+    build:
+      context: .
+      dockerfile: API/CartaoSeguro.API/Dockerfile
+
+volumes:
+  mongo_data:

@@ -1,0 +1,70 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{6047E2A9-4AFB-40DC-8A4D-EE3855D81E19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{C1D17695-C9EF-4BF7-AE43-1E8B382BB6D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{A2D05898-78B0-428D-A43C-354043DF9A4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{761F98CC-23E6-41A8-A9CE-5E088844F5DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A73C3F07-7FCF-4D0B-8CF8-BD484175D174}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoSeguro.API", "API\CartaoSeguro.API\CartaoSeguro.API.csproj", "{1C1E6B5B-9F2E-4784-B744-4894C133AF9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoSeguro.Domain", "Core\CartaoSeguro.Core\CartaoSeguro.Domain.csproj", "{3A189A8E-61F4-4970-9118-943F988F5240}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoSeguro.Application", "Application\CartaoSeguro.Application\CartaoSeguro.Application.csproj", "{A511FE20-3390-4679-B8E9-E87E10E8175B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoSeguro.Infrastructure", "Infrastructure\CartaoSeguro.Infrastructure\CartaoSeguro.Infrastructure.csproj", "{E68FD235-D7FA-490F-BA39-FBFF5DD42AD7}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{3A47FA3C-122B-4102-B56E-BCFAB38B22B7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{5CB82CC7-0DCF-4094-BA39-3CF8CADC1AB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{13DDC12B-09AC-433C-A336-5EEC53198E97}"
+	ProjectSection(SolutionItems) = preProject
+		workflow.yaml = workflow.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C1E6B5B-9F2E-4784-B744-4894C133AF9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C1E6B5B-9F2E-4784-B744-4894C133AF9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C1E6B5B-9F2E-4784-B744-4894C133AF9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C1E6B5B-9F2E-4784-B744-4894C133AF9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A189A8E-61F4-4970-9118-943F988F5240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A189A8E-61F4-4970-9118-943F988F5240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A189A8E-61F4-4970-9118-943F988F5240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A189A8E-61F4-4970-9118-943F988F5240}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A511FE20-3390-4679-B8E9-E87E10E8175B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A511FE20-3390-4679-B8E9-E87E10E8175B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A511FE20-3390-4679-B8E9-E87E10E8175B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A511FE20-3390-4679-B8E9-E87E10E8175B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E68FD235-D7FA-490F-BA39-FBFF5DD42AD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E68FD235-D7FA-490F-BA39-FBFF5DD42AD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E68FD235-D7FA-490F-BA39-FBFF5DD42AD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E68FD235-D7FA-490F-BA39-FBFF5DD42AD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A47FA3C-122B-4102-B56E-BCFAB38B22B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A47FA3C-122B-4102-B56E-BCFAB38B22B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A47FA3C-122B-4102-B56E-BCFAB38B22B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A47FA3C-122B-4102-B56E-BCFAB38B22B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1C1E6B5B-9F2E-4784-B744-4894C133AF9A} = {761F98CC-23E6-41A8-A9CE-5E088844F5DD}
+		{3A189A8E-61F4-4970-9118-943F988F5240} = {6047E2A9-4AFB-40DC-8A4D-EE3855D81E19}
+		{A511FE20-3390-4679-B8E9-E87E10E8175B} = {C1D17695-C9EF-4BF7-AE43-1E8B382BB6D7}
+		{E68FD235-D7FA-490F-BA39-FBFF5DD42AD7} = {A2D05898-78B0-428D-A43C-354043DF9A4F}
+		{13DDC12B-09AC-433C-A336-5EEC53198E97} = {5CB82CC7-0DCF-4094-BA39-3CF8CADC1AB2}
+	EndGlobalSection
+EndGlobal
