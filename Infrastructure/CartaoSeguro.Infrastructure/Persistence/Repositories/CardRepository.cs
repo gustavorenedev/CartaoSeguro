@@ -18,10 +18,6 @@ public class CardRepository : ICardRepository
     public async Task<Card> CreateCardAsync(Card card)
     {
         var user = await _context.Users.Find(u => u.Id == Guid.Parse(card.UserId!)).FirstOrDefaultAsync();
-        if (user == null)
-        {
-            throw new KeyNotFoundException("User not found.");
-        }
 
         card.Id = Guid.NewGuid();
         card.UserId = user.Id.ToString();
@@ -44,14 +40,16 @@ public class CardRepository : ICardRepository
         return existCard != null ? existCard.Number : null;
     }
 
+    public async Task<Card> GetCardByIdAsync(string id)
+    {
+        var existCard = await _context.Cards.Find(c => c.Id == Guid.Parse(id)).FirstOrDefaultAsync();
+
+        return existCard;
+    }
+
     public async Task<List<Card>> GetCardsByUserAsync(string email)
     {
         var user = await _context.Users.Find(u => u.Email == email).FirstOrDefaultAsync();
-
-        if (user == null)
-        {
-            throw new KeyNotFoundException("User not found.");
-        }
 
         var cards = await _context.Cards.Find(c => user.Cards!.Contains(c.Id.ToString())).ToListAsync();
 

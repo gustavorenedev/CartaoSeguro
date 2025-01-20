@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CartaoSeguro.Application.User.Request;
+namespace CartaoSeguro.Application.Card.Request;
 
 public class CardsByUserRequest
 {

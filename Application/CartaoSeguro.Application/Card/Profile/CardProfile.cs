@@ -1,6 +1,5 @@
 ﻿using CartaoSeguro.Application.Card.Request;
 using CartaoSeguro.Application.Card.Response;
-using CartaoSeguro.Application.User.Response;
 
 namespace CartaoSeguro.Application.Card.Profile;
 
@@ -18,10 +17,13 @@ public class CardProfile : AutoMapper.Profile
         CreateMap<CardsByUserResponse, List<Domain.Card.Card>>()
             .ConstructUsing(src => src.Cards!.Select(cardResponse => new Domain.Card.Card
             {
+                Id = cardResponse.Id,
                 Number = cardResponse.Number,
                 Type = cardResponse.Type,
                 CardFlag = cardResponse.CardFlag,
                 Status = cardResponse.Status
             }).ToList() ?? new List<Domain.Card.Card>());
+
+        CreateMap<CardByIdResponse, Domain.Card.Card>().ReverseMap();
     }
 }

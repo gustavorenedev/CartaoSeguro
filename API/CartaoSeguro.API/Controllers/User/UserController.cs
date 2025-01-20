@@ -23,23 +23,23 @@ public class UserController : ControllerBase
     {
         _userService = userService;
     }
-     
+
     /// <summary>
-    /// Endpoint para buscar cartões do usuário.
+    /// Endpoint para buscar usuário pelo email.
     /// </summary>
     /// <param name="userRequest">Email do usuário a ser buscado.</param>
-    /// <returns>Lista dos cartões vinculados ao usuário.</returns>
+    /// <returns>Informações básicas do usuário.</returns>
     /// <response code="200">Consulta realizada com sucesso.</response>
     /// <response code="400">Erro de validação nos dados enviados.</response>
-    [HttpGet("FindCardsByUser")]
-    [ProducesResponseType(typeof(CardsByUserResponse), (int)HttpStatusCode.OK)]
+    [HttpGet("FindUserByEmail")]
+    [ProducesResponseType(typeof(UserByEmailResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> FindCardsByUser([FromQuery] CardsByUserRequest userRequest)
+    public async Task<IActionResult> FindUserByEmail([FromQuery] UserByEmailRequest userRequest)
     {
         if (!ModelState.IsValid)
             return BadRequest("Dados inválidos.");
 
-        var response = await _userService.FindCardsByUser(userRequest);
+        var response = await _userService.FindUserByEmail(userRequest);
 
         return Ok(response);
     }

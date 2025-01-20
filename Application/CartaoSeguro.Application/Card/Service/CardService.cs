@@ -3,6 +3,7 @@ using CartaoSeguro.Application.Card.Request;
 using CartaoSeguro.Application.Card.Response;
 using CartaoSeguro.Application.Card.Service.Interface;
 using CartaoSeguro.Domain.Card.Interface;
+using CartaoSeguro.Domain.User.Interface;
 using System.Text;
 
 namespace CartaoSeguro.Application.Card.Service;
@@ -10,12 +11,31 @@ namespace CartaoSeguro.Application.Card.Service;
 public class CardService : ICardService
 {
     private readonly ICardRepository _cardRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public CardService(ICardRepository cardRepository, IMapper mapper)
+    public CardService(ICardRepository cardRepository, IMapper mapper, IUserRepository userRepository)
     {
         _cardRepository = cardRepository;
         _mapper = mapper;
+        _userRepository = userRepository;
+    }
+
+    public async Task<CardsByUserResponse> FindCardsByUser(CardsByUserRequest userRequest)
+    {
+        if (string.IsNullOrEmpty(userRequest.Email))
+            throw new InvalidOperationException("Email is required.");
+
+        var user = await _userRepository.GetByEmailAsync(userRequest.Email);
+
+        if (user != null)
+        {
+            var cards = await _cardRepository.GetCardsByUserAsync(userRequest.Email) ?? new List<Domain.Card.Card>();
+
+            return _mapper.Map<CardsByUserResponse>(cards);
+        }
+
+        throw new KeyNotFoundException("User not found.");
     }
 
     public async Task<CreateCardResponse> CreateCard(CreateCardRequest card)
@@ -35,6 +55,19 @@ public class CardService : ICardService
         var createCard = await _cardRepository.CreateCardAsync(_mapper.Map<Domain.Card.Card>(newCard));
 
         return _mapper.Map<CreateCardResponse>(createCard);
+    }
+
+    public async Task<CardByIdResponse> FindCardById(CardByIdRequest cardRequest)
+    {
+        if (string.IsNullOrEmpty(cardRequest.Id))
+            throw new InvalidOperationException("Id is required.");
+
+        var card = await _cardRepository.GetCardByIdAsync(cardRequest.Id);
+
+        if (card == null)
+            throw new KeyNotFoundException("Card not found.");
+
+        return _mapper.Map<CardByIdResponse>(card);
     }
 
     private async Task<string> GenerateCardNumber()

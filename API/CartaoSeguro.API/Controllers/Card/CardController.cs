@@ -43,4 +43,44 @@ public class CardController : ControllerBase
 
         return CreatedAtAction(nameof(CreateCard), new { id = response.Number }, response);
     }
+
+    /// <summary>
+    /// Endpoint para buscar cartões do usuário.
+    /// </summary>
+    /// <param name="userRequest">Email do usuário a ser buscado.</param>
+    /// <returns>Lista dos cartões vinculados ao usuário.</returns>
+    /// <response code="200">Consulta realizada com sucesso.</response>
+    /// <response code="400">Erro de validação nos dados enviados.</response>
+    [HttpGet("FindCardsByUser")]
+    [ProducesResponseType(typeof(CardsByUserResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> FindCardsByUser([FromQuery] CardsByUserRequest userRequest)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest("Dados inválidos.");
+
+        var response = await _cardService.FindCardsByUser(userRequest);
+
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// Endpoint para buscar cartão pelo id.
+    /// </summary>
+    /// <param name="cardRequest">Id do cartão a ser buscado.</param>
+    /// <returns>Cartão pelo id.</returns>
+    /// <response code="200">Consulta realizada com sucesso.</response>
+    /// <response code="400">Erro de validação nos dados enviados.</response>
+    [HttpGet("FindCardById")]
+    [ProducesResponseType(typeof(CardByIdResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> FindCardById([FromBody] CardByIdRequest cardRequest)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest("Dados inválidos.");
+
+        var response = await _cardService.FindCardById(cardRequest);
+
+        return Ok(response);
+    }
 }

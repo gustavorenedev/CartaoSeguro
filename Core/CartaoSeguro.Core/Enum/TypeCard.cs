@@ -2,6 +2,6 @@
 
 public enum TypeCard
 {
-    Credit = 1,
-    Debit = 2
+    Credit,
+    Debit
 }

@@ -5,5 +5,5 @@ namespace CartaoSeguro.Application.User.Service.Interface;
 
 public interface IUserService
 {
-    Task<CardsByUserResponse> FindCardsByUser(CardsByUserRequest userRequest);
+    Task<UserByEmailResponse> FindUserByEmail(UserByEmailRequest userRequest);
 }
