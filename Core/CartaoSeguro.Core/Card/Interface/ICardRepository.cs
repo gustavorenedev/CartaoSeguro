@@ -6,4 +6,5 @@ public interface ICardRepository
     Task<List<Card>> GetCardsByUserAsync(string email);
     Task<string> DoesCardNumberExistAsync(string cardNumber);
     Task<Card> GetCardByIdAsync(string id);
+    Task<Card> GetCardByNumberAsync(string cardNumber);
 }

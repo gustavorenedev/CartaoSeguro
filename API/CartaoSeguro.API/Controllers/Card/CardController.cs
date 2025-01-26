@@ -83,4 +83,24 @@ public class CardController : ControllerBase
 
         return Ok(response);
     }
+
+    /// <summary>
+    /// Endpoint para bloquear o cartão do usuário.
+    /// </summary>
+    /// <param name="request">Número do cartão e e-mail do usuário.</param>
+    /// <returns>Bloqueio do cartão.</returns>
+    /// <response code="200">Bloqueio realizado com sucesso.</response>
+    /// <response code="400">Erro de validação nos dados enviados.</response>
+    [HttpPost("BlockUserCard")]
+    [ProducesResponseType(typeof(BlockUserCardResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> BlockUserCard([FromBody] BlockUserCardRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest("Dados inválidos.");
+
+        var response = await _cardService.BlockUserCard(request);
+
+        return Ok(response);
+    }
 }

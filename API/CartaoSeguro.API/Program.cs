@@ -11,13 +11,21 @@ using CartaoSeguro.Infrastructure.Configuration;
 using CartaoSeguro.Infrastructure.Persistence.DbContext;
 using CartaoSeguro.Infrastructure.Persistence.Repositories;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Cartão Seguro API", Version = "v1" });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 // MongoDB Configuration
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("DatabaseSettings"));
@@ -44,7 +52,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cartão Seguro API V1");
+    });
 }
 else
 {

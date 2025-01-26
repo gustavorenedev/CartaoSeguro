@@ -47,6 +47,13 @@ public class CardRepository : ICardRepository
         return existCard;
     }
 
+    public async Task<Card> GetCardByNumberAsync(string cardNumber)
+    {
+        var existCard = await _context.Cards.Find(c => c.Number == cardNumber).FirstOrDefaultAsync();
+
+        return existCard;
+    }
+
     public async Task<List<Card>> GetCardsByUserAsync(string email)
     {
         var user = await _context.Users.Find(u => u.Email == email).FirstOrDefaultAsync();

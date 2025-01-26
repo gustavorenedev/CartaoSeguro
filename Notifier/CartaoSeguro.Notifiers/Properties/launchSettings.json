@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "CartaoSeguro.Notifiers": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  },
+  "WSL": {
+    "commandName": "WSL2",
+    "environmentVariables": {
+      "DOTNET_ENVIRONMENT": "Development"
+    },
+    "distributionName": ""
+  }
+}

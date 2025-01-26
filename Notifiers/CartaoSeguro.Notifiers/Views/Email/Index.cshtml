@@ -1,0 +1,15 @@
+﻿@model CartaoSeguro.Notifiers.Email.Model.EmailModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Token de Verificação</title>
+</head>
+<body>
+    <h1>Olá, @Model.Name!</h1>
+    <p>Estamos enviando este email para confirmar uma solicitação feita.</p>
+    <p>Os últimos 4 dígitos do seu cartão são: <strong>@Model.CardLast4Digits</strong></p>
+    <p>Seu token de verificação é: <strong>@Model.Token</strong></p>
+    <p>Por favor, use este token para prosseguir com sua solicitação.</p>
+</body>
+</html>
