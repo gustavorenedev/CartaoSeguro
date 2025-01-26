@@ -1,6 +1,7 @@
 ﻿using CartaoSeguro.Notifiers.DTOs;
 using CartaoSeguro.Notifiers.Email.Model;
 using CartaoSeguro.Notifiers.Email.Service.Interface;
+using Microsoft.Extensions.Configuration;
 using Razor.Templating.Core;
 using System.Net;
 using System.Net.Mail;
@@ -10,15 +11,17 @@ namespace CartaoSeguro.Notifiers.Email.Service;
 public class EmailService : IEmailService
 {
     private readonly SmtpClient _smtpClient;
+    private readonly IConfiguration _configuration;
 
-    public EmailService()
+    public EmailService(IConfiguration configuration)
     {
         _smtpClient = new SmtpClient("sandbox.smtp.mailtrap.io")
         {
             Port = 587,
-            Credentials = new NetworkCredential("5697ff1d223362", "1740b04f7b1b8e"),
+            Credentials = new NetworkCredential(_configuration["Credentials:Username"], _configuration["Credentials:Password"]),
             EnableSsl = true
         };
+        _configuration = configuration;
     }
 
     public async Task SendEmailAsync(CardAndUser cardAndUserRequest)
