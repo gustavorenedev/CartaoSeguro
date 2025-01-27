@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CartaoSeguro.Application.Authentication.Request;
+namespace CartaoSeguro.Application.Auth.Request;
 
 public class LoginUserRequest
 {

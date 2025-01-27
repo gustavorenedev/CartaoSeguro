@@ -1,4 +1,4 @@
-﻿namespace CartaoSeguro.Application.Authentication.Response;
+﻿namespace CartaoSeguro.Application.Auth.Response;
 
 public class CreateUserResponse
 {

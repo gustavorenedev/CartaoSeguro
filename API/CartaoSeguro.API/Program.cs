@@ -1,6 +1,6 @@
-using CartaoSeguro.Application.Authentication.Profile;
-using CartaoSeguro.Application.Authentication.Service;
-using CartaoSeguro.Application.Authentication.Service.Interface;
+using CartaoSeguro.Application.Auth.Profile;
+using CartaoSeguro.Application.Auth.Service;
+using CartaoSeguro.Application.Auth.Service.Interface;
 using CartaoSeguro.Application.Card.Service;
 using CartaoSeguro.Application.Card.Service.Interface;
 using CartaoSeguro.Application.User.Service;
@@ -10,9 +10,12 @@ using CartaoSeguro.Domain.User.Interface;
 using CartaoSeguro.Infrastructure.Configuration;
 using CartaoSeguro.Infrastructure.Persistence.DbContext;
 using CartaoSeguro.Infrastructure.Persistence.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,27 @@ builder.Services.AddSwaggerGen(options =>
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
+
+// Jwt Configuration
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!))
+    };
 });
 
 // MongoDB Configuration
@@ -46,6 +70,8 @@ builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICardService, CardService>();
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

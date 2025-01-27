@@ -1,6 +1,7 @@
 ﻿using CartaoSeguro.Application.Card.Request;
 using CartaoSeguro.Application.Card.Response;
 using CartaoSeguro.Application.Card.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -10,6 +11,7 @@ namespace CartaoSeguro.API.Controllers.Card;
 /// Controlador para registro, bloqueio, desbloqueio de cartões.
 /// </summary>
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class CardController : ControllerBase
 {

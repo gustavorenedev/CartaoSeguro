@@ -1,7 +1,7 @@
-﻿using CartaoSeguro.Application.Authentication.Request;
-using CartaoSeguro.Application.Authentication.Response;
+﻿using CartaoSeguro.Application.Auth.Request;
+using CartaoSeguro.Application.Auth.Response;
 
-namespace CartaoSeguro.Application.Authentication.Profile;
+namespace CartaoSeguro.Application.Auth.Profile;
 
 public class AuthenticationProfile : AutoMapper.Profile
 {

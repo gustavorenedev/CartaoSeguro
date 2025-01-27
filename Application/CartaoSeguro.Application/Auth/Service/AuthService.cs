@@ -1,37 +1,54 @@
-﻿using AutoMapper;
-using CartaoSeguro.Application.Authentication.Request;
-using CartaoSeguro.Application.Authentication.Response;
-using CartaoSeguro.Application.Authentication.Service.Interface;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using AutoMapper;
+using CartaoSeguro.Application.Auth.Request;
+using CartaoSeguro.Application.Auth.Response;
+using CartaoSeguro.Application.Auth.Service.Interface;
 using CartaoSeguro.Domain.User.Interface;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
-namespace CartaoSeguro.Application.Authentication.Service;
+namespace CartaoSeguro.Application.Auth.Service;
 
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
 
-    public AuthService(IUserRepository userRepository, IMapper mapper)
+    public AuthService(IUserRepository userRepository, IMapper mapper, IConfiguration configuration)
     {
         _userRepository = userRepository;
         _mapper = mapper;
+        _configuration = configuration;
     }
 
     public async Task<string> LoginAsync(LoginUserRequest loginUserRequest)
     {
         if (string.IsNullOrEmpty(loginUserRequest.Email) || string.IsNullOrEmpty(loginUserRequest.Password))
-        {
-            return "Email and password are required.";
-        }
+            return null;
 
         var user = await _userRepository.GetByEmailAsync(loginUserRequest.Email);
-
         if (user == null || !BCrypt.Net.BCrypt.Verify(loginUserRequest.Password, user.Password))
-        {
-            return "Invalid email or password.";
-        }
+            return null;
 
-        return "Login successful";
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+            new Claim(ClaimTypes.Name, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email!)
+        }),
+            Expires = DateTime.UtcNow.AddMinutes(int.Parse(_configuration["JwtSettings:ExpiresInMinutes"]!)),
+            Issuer = _configuration["JwtSettings:Issuer"],
+            Audience = _configuration["JwtSettings:Audience"],
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
     }
 
     public async Task<CreateUserResponse> RegisterAsync(CreateUserRequest userRequest)

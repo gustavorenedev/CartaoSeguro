@@ -1,6 +1,6 @@
-﻿using CartaoSeguro.Application.Authentication.Request;
-using CartaoSeguro.Application.Authentication.Response;
-using CartaoSeguro.Application.Authentication.Service.Interface;
+﻿using CartaoSeguro.Application.Auth.Request;
+using CartaoSeguro.Application.Auth.Response;
+using CartaoSeguro.Application.Auth.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
