@@ -87,11 +87,11 @@ public class CardController : ControllerBase
     }
 
     /// <summary>
-    /// Endpoint para solicitar o bloqueio ou ativação do cartão do usuário.
+    /// Endpoint para solicitar o bloqueio ou desbloqueio do cartão do usuário.
     /// </summary>
     /// <param name="request">Número do cartão e e-mail do usuário.</param>
-    /// <returns>Bloqueio ou Ativação do cartão.</returns>
-    /// <response code="200">Bloqueio ou Ativação realizado com sucesso.</response>
+    /// <returns>Bloqueio ou Desbloqueio do cartão.</returns>
+    /// <response code="200">Bloqueio ou Desbloqueio realizado com sucesso.</response>
     /// <response code="400">Erro de validação nos dados enviados.</response>
     [HttpPost("BlockOrActiveUserCard")]
     [ProducesResponseType(typeof(BlockOrActiveUserCardResponse), (int)HttpStatusCode.OK)]
