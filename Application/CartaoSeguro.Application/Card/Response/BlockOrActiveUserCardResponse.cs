@@ -1,6 +1,6 @@
 ﻿namespace CartaoSeguro.Application.Card.Response;
 
-public class BlockUserCardResponse
+public class BlockOrActiveUserCardResponse
 {
     public string? Message { get; set; }
 }

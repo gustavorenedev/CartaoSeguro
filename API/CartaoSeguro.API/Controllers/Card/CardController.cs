@@ -85,21 +85,41 @@ public class CardController : ControllerBase
     }
 
     /// <summary>
-    /// Endpoint para bloquear o cartão do usuário.
+    /// Endpoint para solicitar o bloqueio ou ativação do cartão do usuário.
     /// </summary>
     /// <param name="request">Número do cartão e e-mail do usuário.</param>
-    /// <returns>Bloqueio do cartão.</returns>
-    /// <response code="200">Bloqueio realizado com sucesso.</response>
+    /// <returns>Bloqueio ou Ativação do cartão.</returns>
+    /// <response code="200">Bloqueio ou Ativação realizado com sucesso.</response>
     /// <response code="400">Erro de validação nos dados enviados.</response>
-    [HttpPost("BlockUserCard")]
-    [ProducesResponseType(typeof(BlockUserCardResponse), (int)HttpStatusCode.OK)]
+    [HttpPost("BlockOrActiveUserCard")]
+    [ProducesResponseType(typeof(BlockOrActiveUserCardResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> BlockUserCard([FromBody] BlockUserCardRequest request)
+    public async Task<IActionResult> BlockOrActiveUserCard([FromBody] BlockOrActiveUserCardRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest("Dados inválidos.");
 
-        var response = await _cardService.BlockUserCard(request);
+        var response = await _cardService.BlockOrActiveUserCard(request);
+
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// Endpoint para confirmar o token recebido.
+    /// </summary>
+    /// <param name="token">Número do token.</param>
+    /// <returns>Bloqueio ou Desbloqueio do cartão.</returns>
+    /// <response code="200">Bloqueio ou Desbloqueio realizado com sucesso.</response>
+    /// <response code="400">Erro de validação nos dados enviados.</response>
+    [HttpPost("ConfirmedToken")]
+    [ProducesResponseType(typeof(BlockOrActiveUserCardResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> ConfirmedToken([FromQuery] string token)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest("Dados inválidos.");
+
+        var response = await _cardService.ConfirmedToken(token);
 
         return Ok(response);
     }

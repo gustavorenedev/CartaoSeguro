@@ -4,4 +4,5 @@ public class CardAndUser
 {
     public Domain.Card.Card? Card { get; set; }
     public Domain.User.User? User { get; set; }
+    public int Token { get; set; }
 }

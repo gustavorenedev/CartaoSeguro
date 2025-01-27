@@ -8,5 +8,6 @@ public interface ICardService
     Task<CreateCardResponse> CreateCard(CreateCardRequest card);
     Task<CardsByUserResponse> FindCardsByUser(CardsByUserRequest userRequest);
     Task<CardByIdResponse> FindCardById(CardByIdRequest cardRequest);
-    Task<BlockUserCardResponse> BlockUserCard(BlockUserCardRequest request);
+    Task<BlockOrActiveUserCardResponse> BlockOrActiveUserCard(BlockOrActiveUserCardRequest request);
+    Task<string> ConfirmedToken(string token);
 }

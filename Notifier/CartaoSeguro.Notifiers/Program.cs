@@ -1,8 +1,9 @@
-﻿using CartaoSeguro.Notifiers;
-using CartaoSeguro.Notifiers.Email.Service;
+﻿using CartaoSeguro.Notifiers.Email.Service;
 using CartaoSeguro.Notifiers.Email.Service.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+namespace CartaoSeguro.Notifiers;
 
 public class Program
 {

@@ -20,7 +20,7 @@ public class Card
     [BsonElement("ExpirationDate")]
     public DateTime ExpirationDate { get; set; }
     [BsonElement("Status")]
-    public Status Status { get; set; }
+    public Status? Status { get; set; }
     [BsonElement("UserId")]
     public string? UserId { get; set; }
 }

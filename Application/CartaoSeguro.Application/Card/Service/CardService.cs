@@ -1,18 +1,23 @@
-﻿using AutoMapper;
+﻿using System.Text;
+using System.Text.Json;
+using AutoMapper;
 using CartaoSeguro.Application.Card.Request;
 using CartaoSeguro.Application.Card.Response;
 using CartaoSeguro.Application.Card.Service.Interface;
 using CartaoSeguro.Domain.Card.Interface;
+using CartaoSeguro.Domain.Enum;
 using CartaoSeguro.Domain.User.Interface;
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
-using System.Text;
-using System.Text.Json;
 
 namespace CartaoSeguro.Application.Card.Service;
 
 public class CardService : ICardService
 {
+    private static int? tokenToUser;
+    private static Status? actUser;
+    private static string? cardNumberToUser;
+
     private readonly ICardRepository _cardRepository;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
@@ -27,8 +32,8 @@ public class CardService : ICardService
         _userRepository = userRepository;
         _configuration = configuration;
 
-        _cardTopicName = _configuration["CardSettings:CardTopicName"];
-        _kafkaBootstrapServers = _configuration["CardSettings:KafkaBootstrapServer"];
+        _cardTopicName = _configuration["CardSettings:CardTopicName"]!;
+        _kafkaBootstrapServers = _configuration["CardSettings:KafkaBootstrapServer"]!;
     }
 
     public async Task<CardsByUserResponse> FindCardsByUser(CardsByUserRequest userRequest)
@@ -120,7 +125,7 @@ public class CardService : ICardService
         return DateTime.Now.AddYears(5);
     }
 
-    public async Task<BlockUserCardResponse> BlockUserCard(BlockUserCardRequest request)
+    public async Task<BlockOrActiveUserCardResponse> BlockOrActiveUserCard(BlockOrActiveUserCardRequest request)
     {
         var card = await _cardRepository.GetCardByNumberAsync(request.Number!);
         var user = await _userRepository.GetByEmailAsync(request.Email!);
@@ -134,11 +139,17 @@ public class CardService : ICardService
         var cardAndUser = new CardAndUserRequest
         {
             Card = card,
-            User = user
+            User = user,
+            Act = request.Act,
+            Token = GenerateToken()
         };
 
+        tokenToUser = cardAndUser.Token;
+        actUser = request.Act;
+        cardNumberToUser = cardAndUser.Card.Number!;
+
         await PublishMessageToTopic(cardAndUser);
-        return new BlockUserCardResponse { Message = "An email has been sent confirming your request with a token that you will use to confirm the block." };
+        return new BlockOrActiveUserCardResponse { Message = "An email has been sent confirming your request with a token that you will use to confirm the act." };
     }
 
     private async Task PublishMessageToTopic(CardAndUserRequest request)
@@ -154,5 +165,29 @@ public class CardService : ICardService
         {
             var cardReport = await producer.ProduceAsync(_cardTopicName, new Message<Null, string> { Value = cardAndUserConvertedToJson });
         }
+    }
+
+    private static int GenerateToken()
+    {
+        var random = new Random();
+        return random.Next(100000, 999999);
+    }
+
+    public Task<string> ConfirmedToken(string token)
+    {
+        if (token == tokenToUser.ToString())
+        {
+            if (actUser == Status.Blocked)
+            {
+                _cardRepository.AlterStatusCard(actUser, cardNumberToUser!);
+                return Task.FromResult("Card successfully blocked.");
+            }
+            else
+            {
+                _cardRepository.AlterStatusCard(actUser, cardNumberToUser!);
+                return Task.FromResult("Card successfully Active.");
+            }
+        }
+        return Task.FromResult("Invalid token.");
     }
 }

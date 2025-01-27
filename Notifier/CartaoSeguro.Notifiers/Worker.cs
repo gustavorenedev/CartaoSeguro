@@ -1,11 +1,11 @@
-﻿using CartaoSeguro.Notifiers.DTOs;
+﻿using System.Text.Json;
+using CartaoSeguro.Notifiers.DTOs;
 using CartaoSeguro.Notifiers.Email.Service;
 using CartaoSeguro.Notifiers.Email.Service.Interface;
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace CartaoSeguro.Notifiers;
 
@@ -34,13 +34,13 @@ public class Worker : BackgroundService
     /// <returns></returns>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Worker iniciado e aguardando mensagens...");
+        _logger.LogInformation("Worker started and waiting for messages...");
 
-        IEmailService emailService = new EmailService();
+        IEmailService emailService = new EmailService(_configuration);
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("Order notifier rodando as: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("Card notifier running at: {time}", DateTimeOffset.Now);
 
             var config = new ConsumerConfig
             {
@@ -53,7 +53,7 @@ public class Worker : BackgroundService
             {
                 consumer.Subscribe(_cardTopicName);
 
-                _logger.LogInformation("Inscrito no tópico {topic}", _cardTopicName);
+                _logger.LogInformation("Subscribe in topic {topic}", _cardTopicName);
 
                 CancellationTokenSource cts = new CancellationTokenSource();
                 Console.CancelKeyPress += (_, e) => {
@@ -69,27 +69,26 @@ public class Worker : BackgroundService
                         {
                             var consumeResult = consumer.Consume(cts.Token);
 
-                            _logger.LogInformation("Mensagem recebida: {message}", consumeResult.Message.Value);
+                            _logger.LogInformation("Message received: {message}", consumeResult.Message.Value);
 
                             CardAndUser cardAndUserRequest = JsonSerializer.Deserialize<CardAndUser>(consumeResult.Message.Value)!;
 
                             await emailService.SendEmailAsync(cardAndUserRequest);
 
-                            Console.WriteLine($"Mensagem processada: {consumeResult.Message.Value}");
+                            Console.WriteLine($"Processed message: {consumeResult.Message.Value}");
                         }
                         catch (ConsumeException e)
                         {
-                            _logger.LogError("Erro ao consumir a mensagem: {error}", e.Error.Reason);
+                            _logger.LogError("Error consuming message: {error}", e.Error.Reason);
                         }
                     }
                 }
                 catch (OperationCanceledException)
                 {
-                    _logger.LogInformation("Worker cancelado. Fechando consumidor...");
+                    _logger.LogInformation("Worker cancelled. Closing consumer...");
                     consumer.Close();
                 }
             }
         }
     }
-
 }

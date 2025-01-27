@@ -1,4 +1,6 @@
-﻿namespace CartaoSeguro.Domain.Card.Interface;
+﻿using CartaoSeguro.Domain.Enum;
+
+namespace CartaoSeguro.Domain.Card.Interface;
 
 public interface ICardRepository
 {
@@ -7,4 +9,5 @@ public interface ICardRepository
     Task<string> DoesCardNumberExistAsync(string cardNumber);
     Task<Card> GetCardByIdAsync(string id);
     Task<Card> GetCardByNumberAsync(string cardNumber);
+    Task AlterStatusCard(Status? act, string cardNumber);
 }

@@ -1,5 +1,6 @@
 ﻿using CartaoSeguro.Domain.Card;
 using CartaoSeguro.Domain.Card.Interface;
+using CartaoSeguro.Domain.Enum;
 using CartaoSeguro.Domain.User;
 using CartaoSeguro.Infrastructure.Persistence.DbContext;
 using MongoDB.Driver;
@@ -13,6 +14,12 @@ public class CardRepository : ICardRepository
     public CardRepository(IApplicationDbContext context)
     {
         _context = context;
+    }
+
+    public async Task AlterStatusCard(Status? act, string cardNumber)
+    {
+        var update = Builders<Card>.Update.Set(c => c.Status, act);
+        await _context.Cards.UpdateOneAsync(c => c.Number == cardNumber, update);
     }
 
     public async Task<Card> CreateCardAsync(Card card)
