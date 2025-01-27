@@ -3,6 +3,8 @@ using CartaoSeguro.Application.Auth.Service;
 using CartaoSeguro.Application.Auth.Service.Interface;
 using CartaoSeguro.Application.Card.Service;
 using CartaoSeguro.Application.Card.Service.Interface;
+using CartaoSeguro.Application.MessagePublisher.Service;
+using CartaoSeguro.Application.MessagePublisher.Service.Interface;
 using CartaoSeguro.Application.User.Service;
 using CartaoSeguro.Application.User.Service.Interface;
 using CartaoSeguro.Domain.Card.Interface;
@@ -70,6 +72,7 @@ builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICardService, CardService>();
+builder.Services.AddScoped<IMessagePublisher, KafkaMessagePublisher>();
 
 builder.Services.AddAuthorization();
 

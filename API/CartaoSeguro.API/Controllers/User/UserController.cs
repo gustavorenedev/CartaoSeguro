@@ -1,8 +1,9 @@
-﻿using CartaoSeguro.Application.User.Request;
+﻿using System.Net;
+using CartaoSeguro.Application.User.Request;
 using CartaoSeguro.Application.User.Response;
 using CartaoSeguro.Application.User.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace CartaoSeguro.API.Controllers.User;
 
@@ -10,6 +11,7 @@ namespace CartaoSeguro.API.Controllers.User;
 /// Controlador para procurar informações sobre o usuário.
 /// </summary>
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class UserController : ControllerBase
 {

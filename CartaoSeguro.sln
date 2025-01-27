@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifier", "Notifier", "{F3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoSeguro.Notifiers", "Notifier\CartaoSeguro.Notifiers\CartaoSeguro.Notifiers.csproj", "{962B4517-7B9A-4FDB-90FC-63E9FCC801B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoSeguro.Tests", "..\Tests\CartaoSeguro.Tests\CartaoSeguro.Tests.csproj", "{9F288298-52B0-418D-9D56-80584E2C1036}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{962B4517-7B9A-4FDB-90FC-63E9FCC801B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{962B4517-7B9A-4FDB-90FC-63E9FCC801B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{962B4517-7B9A-4FDB-90FC-63E9FCC801B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F288298-52B0-418D-9D56-80584E2C1036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F288298-52B0-418D-9D56-80584E2C1036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F288298-52B0-418D-9D56-80584E2C1036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F288298-52B0-418D-9D56-80584E2C1036}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +73,6 @@ Global
 		{A511FE20-3390-4679-B8E9-E87E10E8175B} = {C1D17695-C9EF-4BF7-AE43-1E8B382BB6D7}
 		{E68FD235-D7FA-490F-BA39-FBFF5DD42AD7} = {A2D05898-78B0-428D-A43C-354043DF9A4F}
 		{962B4517-7B9A-4FDB-90FC-63E9FCC801B7} = {F3D82489-E618-4EA9-BB08-4ED5762F2FFF}
+		{9F288298-52B0-418D-9D56-80584E2C1036} = {A73C3F07-7FCF-4D0B-8CF8-BD484175D174}
 	EndGlobalSection
 EndGlobal

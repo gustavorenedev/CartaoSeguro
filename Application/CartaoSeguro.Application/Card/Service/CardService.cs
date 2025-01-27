@@ -1,14 +1,12 @@
 ﻿using System.Text;
-using System.Text.Json;
 using AutoMapper;
 using CartaoSeguro.Application.Card.Request;
 using CartaoSeguro.Application.Card.Response;
 using CartaoSeguro.Application.Card.Service.Interface;
+using CartaoSeguro.Application.MessagePublisher.Service.Interface;
 using CartaoSeguro.Domain.Card.Interface;
 using CartaoSeguro.Domain.Enum;
 using CartaoSeguro.Domain.User.Interface;
-using Confluent.Kafka;
-using Microsoft.Extensions.Configuration;
 
 namespace CartaoSeguro.Application.Card.Service;
 
@@ -21,19 +19,14 @@ public class CardService : ICardService
     private readonly ICardRepository _cardRepository;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
-    private readonly IConfiguration _configuration;
-    private readonly string _cardTopicName;
-    private readonly string _kafkaBootstrapServers;
+    private readonly IMessagePublisher _messagePublisher;
 
-    public CardService(ICardRepository cardRepository, IMapper mapper, IUserRepository userRepository, IConfiguration configuration)
+    public CardService(ICardRepository cardRepository, IMapper mapper, IUserRepository userRepository, IMessagePublisher messagePublisher)
     {
         _cardRepository = cardRepository;
         _mapper = mapper;
         _userRepository = userRepository;
-        _configuration = configuration;
-
-        _cardTopicName = _configuration["CardSettings:CardTopicName"]!;
-        _kafkaBootstrapServers = _configuration["CardSettings:KafkaBootstrapServer"]!;
+        _messagePublisher = messagePublisher;
     }
 
     public async Task<CardsByUserResponse> FindCardsByUser(CardsByUserRequest userRequest)
@@ -148,23 +141,9 @@ public class CardService : ICardService
         actUser = request.Act;
         cardNumberToUser = cardAndUser.Card.Number!;
 
-        await PublishMessageToTopic(cardAndUser);
+        await _messagePublisher.PublishAsync(cardAndUser);
+
         return new BlockOrActiveUserCardResponse { Message = "An email has been sent confirming your request with a token that you will use to confirm the act." };
-    }
-
-    private async Task PublishMessageToTopic(CardAndUserRequest request)
-    {
-        var config = new ProducerConfig
-        {
-            BootstrapServers = _kafkaBootstrapServers
-        };
-
-        string cardAndUserConvertedToJson = JsonSerializer.Serialize(request);
-
-        using (var producer = new ProducerBuilder<Null, string>(config).Build())
-        {
-            var cardReport = await producer.ProduceAsync(_cardTopicName, new Message<Null, string> { Value = cardAndUserConvertedToJson });
-        }
     }
 
     private static int GenerateToken()
